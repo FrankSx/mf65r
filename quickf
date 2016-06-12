@@ -1,0 +1,13 @@
+#!/bin/sh
+HEADER1="QuickF"
+echo "$HEADER1"
+echo "Search: "
+read SEARCH_PARAM
+echo "Print Before"
+read PRNB 
+echo "Print After"
+read PRNA 
+
+
+strings  "$1" | grep "$SEARCH_PARAM" -B "$PRNB" -A "$PRNA"
+

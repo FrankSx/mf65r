@@ -1,0 +1,116 @@
+<html>
+<head>
+<title><% asp_get("pageTitle"); %></title>
+<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+<META HTTP-EQUIV="Expires" CONTENT="-1">
+<META http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link href="style/webgui.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="/js/lang.js"></script>
+<script type="text/javascript">
+var language = '<% asp_get("Language"); %>'; 
+Butterlate.lang = language;
+Butterlate.setTextDomain("mode_switch");
+var current_mode   = '<% asp_get("current_mode"); %>'; 
+var is_persist   = '<% asp_get("debug_mode_is_persist"); %>'; 
+function handleForm()
+	if(document.mode_switch.mode[1].checked == true)
+		if (document.getElementById("save_flag").checked)
+			document.getElementById("is_persist").value = "1";
+		else
+			document.getElementById("is_persist").value = "0";
+	if (document.mode_switch.mode[0].checked == true)
+		document.getElementById("switchCmd").value = "FACTORY";
+	else if (document.mode_switch.mode[1].checked == true)
+		document.getElementById("switchCmd").value = "DEBUG";
+	else if (document.mode_switch.mode[2].checked == true)
+		document.getElementById("switchCmd").value = "WORK";
+	//alert(document.getElementById("switchCmd").value);
+	//alert(document.getElementById("is_persist").value);
+function initTranslation()
+function initPage()
+	//initTranslation();
+	if ("DEBUG" == current_mode)
+		document.getElementById("save_flag").disabled = false;
+	else
+		document.getElementById("save_flag").disabled = true;
+	if (("DEBUG" == current_mode) && ("1" == is_persist))
+		document.getElementById("save_flag").checked = true;
+function enable_save_chbox()
+	document.getElementById("save_flag").disabled = false;
+function disable_save_chbox()
+	document.getElementById("save_flag").disabled = true;
+function handleRefresh()
+	document.getElementById("switchCmd").value = "CURRENT_MODE";
+</script>
+</head>
+<body class="subpage_body_web" style="overflow-x:hidden;"  onLoad="initPage();">
+<form name="mode_switch" action="/goform/goform_process" method="post" >
+<INPUT type="hidden" value="MODE_SWITCH_WEB" name="goformId" id="goformId">
+<INPUT type="hidden" value="" name="lucknum_MODE_SWITCH_WEB" id="lucknum_MODE_SWITCH_WEB">
+<INPUT type="hidden" value="" name="switchCmd" id="switchCmd">
+<INPUT type="hidden" value="0" name="is_persist" id="is_persist">
+	<table cellspacing="0" cellpadding="10" width="100%" border="0" >
+		<tr>
+			<td valign="top">
+	    <br>                                                                      
+        <table id="mode_setting_table" cellspacing=0 cellpadding=0 width=100% border=0 > 
+        <tr>
+            <td class="listtopic" id="mode_switch_title" >Mode Switch:</td>
+        </tr>
+        <tr>                                                                    
+            <td colspan=3>&nbsp;</td>
+        </tr>			                                                               
+        <tr>
+            <td class="top_head" id="factory_mode_td">
+            <input type="radio" value="FACTORY" name="mode" id="mode" class="radioStyle" <% asp_match("current_mode","FACTORY","checked"); %> onClick="disable_save_chbox();"> 
+            <span id="factory_mode">Download Mode(DIAG+AT+MODEM)</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="head" id="debug_mode_td" >
+            <input type="radio" value="DEBUG" name="mode" id="mode" class="radioStyle" <% asp_match("current_mode","DEBUG","checked"); %> onClick="enable_save_chbox();"> 
+            <span id="debug_mode">Debug Mode(RNDIS+DIAG+AT+MODEM)</span>
+            <input type="checkbox" value="save" name="save_flag" id="save_flag" class="radioStyle"> 
+            <span id="save_chbox">Save</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="head" id="work_mode_td" >
+            <input type="radio" value="WORK" name="mode" id="mode" class="radioStyle" <% asp_match("current_mode","WORK","checked"); %> onClick="disable_save_chbox();"> 
+            <span id="work_mode">Work Mode(RNDIS)</span>
+            </td>
+        </tr>
+        <tr>
+        <td class="head" >
+            Note:
+        </td>
+        </tr>
+        <tr>
+        <td class="head" >
+            1. After you have switched the mode, you must refresh the page!
+        </td>
+        </tr>
+        <tr>
+        <td class="head" >
+            2. When you restart the modem, you should click "Refresh" to get current latest mode!
+        </td>
+        </tr>
+    <!--      
+        <tr>
+            <td colspan="2" style="text-align:right">
+            <input type="submit" value="Apply" id="mode_apply" name="mode_apply" class="btn" onClick="handleForm();" onMouseOver="this.className='menu_over'" onMouseOut="this.className='menu_out'"/>  
+            <input type="submit" value="Refresh" id="refresh" name="refresh" class="btn" onClick="handleRefresh();"onMouseOver="this.className='menu_over'" onMouseOut="this.className='menu_out'"/>               
+            </td>
+        </tr>
+    -->  
+			</table>
+        <div class="div_btn">
+        <input type="submit" value="Apply" id="mode_apply" name="mode_apply" class="btn" onClick="handleForm();"onMouseOver="this.className='menu_over'" onMouseOut="this.className='menu_out'"/>  
+        <input type="submit" value="Refresh" id="refresh" name="refresh" class="btn" onClick="handleRefresh();"onMouseOver="this.className='menu_over'" onMouseOut="this.className='menu_out'"/>               
+        </div>
+			</td>
+		</tr>
+	</table>
+</form>
+</body>
+</html>
